@@ -59,7 +59,7 @@ jobs:
       - uses: actions/upload-artifact@v5
         with:
           name: webssh
-          path: target/x86_64-unknown-linux-musl/release-webssh
+          path: target/x86_64-unknown-linux-musl/release/webssh
           retention-days: 7
 
   deploy:
