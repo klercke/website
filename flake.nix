@@ -46,6 +46,7 @@
               package = pkgs.prek;
               hooks = {
                 nixfmt.enable = true;
+                reuse.enable = true;
                 rustfmt = {
                   enable = true;
                   packageOverrides = {
