@@ -46,6 +46,17 @@ handle_errors {
 
 Without this, visitors just get a default 404 page.
 
+For Plausible Analytics, Caddy needs this block:
+```caddyfile
+@plausible path /js/script.js /api/event
+handle @plausible {
+    rewrite /js/script.js /js/pa-Ol-QVpdHOyuKkkUSi7859.js
+    reverse_proxy https://plausible.io {
+        header_up Host {http.reverse_proxy.upstream.hostport}
+    }
+}
+```
+
 ## License
 
 This repository follows the [REUSE](https://reuse.software/) specification;
