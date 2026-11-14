@@ -20,6 +20,10 @@ pub const FILES: &[File] = &[
         body: include_str!("../../site/content/links.md"),
     },
     File {
+        name: "privacy.md",
+        body: include_str!("../../site/content/privacy.md"),
+    },
+    File {
         name: "security.txt",
         body: include_str!("../../site/static/.well-known/security.txt"),
     },
@@ -39,6 +43,7 @@ pub const PAGES: &[(&str, &str)] = &[
     ("projects", "/projects/"),
     ("links", "/links/"),
     ("contact", "/contact/"),
+    ("privacy", "/privacy/"),
 ];
 
 pub const SITE: &str = "https://klercke.com";
