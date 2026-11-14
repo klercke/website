@@ -74,6 +74,8 @@
               pkgs.just
               pkgs.cargo-watch
               pkgs.prek
+              pkgs.cargo-zigbuild
+              pkgs.zig
             ]
             ++ config.pre-commit.settings.enabledPackages;
             shellHook = config.pre-commit.installationScript;

@@ -49,3 +49,11 @@ git-info:
         git log -1 --format="\"${f#site/content/}\" = { hash = \"%H\", short = \"%h\", date = \"%cs\" }" -- "$f"
       done
     } > site/data/git.toml
+
+# Build the SSH server as a static binary for the web server
+build-webssh:
+    cargo zigbuild --release --target x86_64-unknown-linux-musl -p ssh
+
+# Build the webssh binary and run it locally on port 2222
+run-webssh: build-webssh
+    WEBSSH_LISTEN='[::]:2222' target/x86_64-unknown-linux-musl/release/webssh
