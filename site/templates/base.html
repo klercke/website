@@ -6,6 +6,9 @@
   <title>{% block title %}{{ config.title }}{% endblock title %}</title>
   <meta name="description" content="{{ config.description }}">
   <link rel="stylesheet" href="{{ get_url(path='style.css', cachebust=true) }}">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <!-- Privacy-friendly analytics by Plausible, skipped when Global Privacy Control is on. See /privacy/ -->
   <script>
     if (!navigator.globalPrivacyControl) {
