@@ -58,3 +58,27 @@ footer {
   }
 }
 
+main > h1:first-child:not(.no-cursor)::after,
+.quote::after {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 0.15em;
+  vertical-align: -0.1em;
+  background: currentColor;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main > h1:first-child::after,
+  .quote::after {
+    animation: none;
+  }
+}
