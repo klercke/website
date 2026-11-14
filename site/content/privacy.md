@@ -17,4 +17,4 @@ What that means:
 I'm a paying Plausible customer with no other connection to them.
 The description above is my summary of how their service works; their data policy is the authoritative version.
 
-Like any web server, mine keeps standard access logs (IP address, page, and browser) for a short time, for troubleshooting and abuse prevention.
+Like any web server, mine keeps standard access logs (IP address, page, and browser) for 14 days, for troubleshooting and abuse prevention.
