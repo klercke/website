@@ -4,7 +4,7 @@ description = "Konnor Klercke’s personal website: homelab, infrastructure-as-c
 default_language = "en"
 
 compile_sass = true
-minify_html = true
+minify_html = false # True would break my 404 page
 build_search_index = false
 generate_feeds = false
 

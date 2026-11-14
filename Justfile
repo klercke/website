@@ -1,7 +1,5 @@
 set shell := ["bash", "-euo", "pipefail", "-c"]
 
-deploy_target := env("DEPLOY_TARGET", "")
-
 default:
     @just --list
 
