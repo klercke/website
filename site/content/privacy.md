@@ -20,3 +20,5 @@ The description above is my summary of how their service works; their data polic
 Like any web server, mine keeps standard access logs (IP address, page, and browser) for 14 days, for troubleshooting and abuse prevention.
 
 If you connect via SSH (`ssh klercke.com`), the SSH version of the shell logs your IP address for up to 14 days. for abuse prevention.
+
+The web server may have backups with rentention longer than 14 days which contain the logs above.
