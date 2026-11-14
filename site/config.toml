@@ -1,0 +1,21 @@
+base_url = "https://klercke.com"
+title = "Konnor Klercke"
+description = "Konnor Klercke’s personal website: homelab, infrastructure-as-code and RF projects"
+default_language = "en"
+
+compile_sass = true
+minify_html = true
+build_search_index = false
+generate_feeds = false
+
+[markdown]
+smart_punctuation = false
+
+[extra]
+nav = [
+  { name = "home", path = "/" },
+  { name = "projects", path = "/projects/" },
+  { name = "links", path = "/links/" },
+  { name = "contact", path = "/contact/" },
+  { name = "shell", path = "/shell/" },
+]

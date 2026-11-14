@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>shell | Konnor Klercke</title>
+  <link data-trunk rel="rust" data-bin="web">
+  <style>
+    :root {
+      --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas,
+        "DejaVu Sans Mono", "Liberation Mono", monospace;
+    }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: #282828;
+      color: #ebdbb2;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    #shell {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+    }
+    #shell canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .mobile-note {
+      display: none;
+      font-family: var(--mono);
+      padding: 0.5rem 1rem;
+      text-align: center;
+    }
+    .mobile-note a {
+      color: #8ec07c;
+    }
+    @media (pointer: coarse) {
+      .mobile-note {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <p class="mobile-note">This works better with a keyboard. <a href="/">Back to klercke.com</a></p>
+  <div id="shell"></div>
+</body>
+</html>

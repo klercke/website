@@ -1,0 +1,17 @@
+[package]
+name = "ssh"
+description = "russh server that serves the klercke.com shell"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "webssh"
+path = "src/main.rs"
+
+[dependencies]
+app.workspace = true
+
+[lints]
+workspace = true

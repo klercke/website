@@ -1,0 +1,16 @@
+[package]
+name = "web"
+description = "Ratzilla frontend for the klercke.com shell"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+app.workspace = true
+ratzilla = "0.3"
+console_error_panic_hook = "0.1"
+web-sys = { version = "0.3", features = ["Window", "Location", "EventTarget", "KeyboardEvent", "console"] }
+
+[lints]
+workspace = true

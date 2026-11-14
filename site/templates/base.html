@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+  <meta name="description" content="{{ config.description }}">
+  <link rel="stylesheet" href="{{ get_url(path='style.css', cachebust=true) }}">
+</head>
+<body>
+  <header>
+    <nav>
+      {% for item in config.extra.nav %}
+      <a href="{{ get_url(path=item.path) }}">{{ item.name }}</a>
+      {% endfor %}
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock content %}
+  </main>
+  <footer>
+    <p><code>ssh klercke.com</code></p>
+  </footer>
+</body>
+</html>

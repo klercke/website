@@ -1,1 +1,8 @@
-.vscode
+.pre-commit-config.yaml
+.direnv
+/target
+/web/dist
+/site/public
+/site/static/shell
+result
+result-*

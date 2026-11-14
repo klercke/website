@@ -1,0 +1,54 @@
+$bg0: #282828;
+$bg1: #3c3836;
+$fg: #ebdbb2;
+$yellow: #fabd2f;
+$orange: #fe8019;
+$aqua: #8ec07c;
+
+$mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Menlo, Consolas,
+  "DejaVu Sans Mono", "Liberation Mono", monospace;
+
+html {
+  background: $bg0;
+  color: $fg;
+  font-family: $mono;
+  line-height: 1.6;
+}
+
+body {
+  max-width: 72ch;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+nav a {
+  margin-right: 1.5ch;
+}
+
+a {
+  color: $aqua;
+}
+
+a:hover {
+  color: $yellow;
+}
+
+h1, h2, h3 {
+  color: $yellow;
+}
+
+code {
+  background: $bg1;
+  color: $orange;
+  padding: 0 0.4ch;
+}
+
+.callout {
+  border-left: 3px solid $orange;
+  padding-left: 1ch;
+}
+
+footer {
+  margin-top: 3rem;
+  opacity: 0.7;
+}

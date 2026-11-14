@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}404 | {{ config.title }}{% endblock title %}
+{% block content %}
+{% set data = load_data(path="data/404-quotes.toml") %}
+<h1>404: page not found</h1>
+<p class="quote"><!--[[/*-->// I'm way funnier behind Caddy.<!--*/ -]]
+[[- $q := list{% for q in data.quotes %} {{ q | json_encode | safe }}{% endfor %} -]]
+[[- print "--" ">" ]][[ index $q (randInt 0 (len $q)) ]][[ print "<" "!--" ]]--></p>
+<p><a href="{{ get_url(path='/') }}">back home</a></p>
+{% endblock content %}

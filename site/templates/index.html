@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+{{ section.content | safe }}
+<section class="callout">
+  <p>Live in the terminal? <a href="{{ get_url(path='/shell/') }}">Try the shell in your browser</a>, or run <code>ssh klercke.com</code>.</p>
+</section>
+{% endblock content %}
