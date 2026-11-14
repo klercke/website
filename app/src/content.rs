@@ -8,15 +8,15 @@ pub struct File {
 
 pub const FILES: &[File] = &[
     File {
-        name: "about",
+        name: "about.md",
         body: include_str!("../../site/content/_index.md"),
     },
     File {
-        name: "projects",
+        name: "projects.md",
         body: include_str!("../../site/content/projects.md"),
     },
     File {
-        name: "links",
+        name: "links.md",
         body: include_str!("../../site/content/links.md"),
     },
     File {
