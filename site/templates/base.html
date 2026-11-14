@@ -18,8 +18,28 @@
   <main>
     {% block content %}{% endblock content %}
   </main>
+  {% set git = load_data(path="data/git.toml", required=false) %}
+  {% set repo = "https://github.com/klercke/website" %}
   <footer>
-    <p><code>ssh klercke.com</code></p>
+    {% if git %}
+      {% if page is defined %}
+        {% set rel = page.relative_path %}
+      {% elif section is defined %}
+        {% set rel = section.relative_path %}
+      {% else %}
+        {% set rel = "" %}
+      {% endif %}
+      {% set entry = git.pages | get(key=rel, default="") %}
+      {% if entry %}
+      <p>Last updated {{ entry.date }} (<a href="{{ repo }}/commit/{{ entry.hash }}"><code>{{ entry.short }}</code></a>)</p>
+      {% endif %}
+    {% endif %}
+    <p>
+      Code: <a href="{{ repo }}/blob/main/LICENSES/AGPL-3.0-or-later.txt">AGPL-3.0</a>
+      · Writing: <a href="{{ repo }}/blob/main/LICENSES/CC-BY-SA-4.0.txt">CC BY-SA 4.0</a>
+      · <a href="{{ repo }}{% if git %}/tree/{{ git.head }}{% endif %}">source
+      {%- if git %} <code>{{ git.head_short }}</code>{% if git.dirty %} (modified){% endif %}{% endif %}</a>
+    </p>
   </footer>
 </body>
 </html>

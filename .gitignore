@@ -6,3 +6,4 @@
 /site/static/shell
 result
 result-*
+/site/data/git.toml

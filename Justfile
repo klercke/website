@@ -14,11 +14,11 @@ build-web:
     cp -r web/dist site/static/shell
 
 # Build the whole site into site/public
-build-site: build-web
+build-site: build-web git-info
     cd site && zola build
 
 # Serve the Zola site (run build-web first if you want /shell to work)
-serve:
+serve: git-info
     cd site && zola serve
 
 # Serve the browser shell alone, with live reload
@@ -36,3 +36,16 @@ check:
     cargo clippy -p web --target wasm32-unknown-unknown -- -D warnings
     cargo test --workspace --exclude web
 
+# Write commit info for each content file to site/data/git.toml
+git-info:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    {
+      printf 'head = "%s"\n' "$(git rev-parse HEAD)"
+      printf 'head_short = "%s"\n' "$(git rev-parse --short HEAD)"
+      if git diff --quiet HEAD; then echo 'dirty = false'; else echo 'dirty = true'; fi
+      printf '\n[pages]\n'
+      git ls-files site/content | while read -r f; do
+        git log -1 --format="\"${f#site/content/}\" = { hash = \"%H\", short = \"%h\", date = \"%cs\" }" -- "$f"
+      done
+    } > site/data/git.toml
