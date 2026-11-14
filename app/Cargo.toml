@@ -1,0 +1,16 @@
+[package]
+name = "app"
+description = "Shared Ratatui UI for the klercke.com shell"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+ratatui = { workspace = true, features = ["unstable-rendered-line-info"] }
+
+[dev-dependencies]
+ratatui = { workspace = true, features = ["crossterm"] }
+
+[lints]
+workspace = true

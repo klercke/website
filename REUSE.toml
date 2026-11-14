@@ -1,0 +1,22 @@
+version = 1
+
+[[annotations]]
+path = "**"
+SPDX-FileCopyrightText = "Konnor Klercke <konnor@klercke.com>"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = ["site/content/**", "site/data/404-quotes.toml"]
+SPDX-FileCopyrightText = "Konnor Klercke <konnor@klercke.com>"
+SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+[[annotations]]
+path = [
+  "Cargo.lock",
+  "flake.lock",
+  "site/static/pgp-key.txt",
+  "site/static/hall-of-fame.txt",
+  "site/static/.well-known/security.txt",
+]
+SPDX-FileCopyrightText = "Konnor Klercke <konnor@klercke.com>"
+SPDX-License-Identifier = "CC0-1.0"

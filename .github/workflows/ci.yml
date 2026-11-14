@@ -1,0 +1,133 @@
+name: CI
+
+on:
+  push:
+    branches: [main, rewrite, feature/*]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Check and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ github.token }}
+
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cache/trunk
+            target
+          key: cargo-${{ runner.os }}-${{ hashFiles('Cargo.lock', 'rust-toolchain.toml') }}
+          restore-keys: cargo-${{ runner.os }}-
+
+      - name: Lint and test
+        run: nix develop --command just check
+
+      - name: REUSE compliance
+        run: nix develop --command reuse lint
+
+      - name: Build site
+        run: nix develop --command just build-site
+
+      - name: Build webssh
+        run: nix develop --command just build-webssh
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: site
+          path: site/public
+          retention-days: 7
+          include-hidden-files: true
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: webssh
+          path: target/x86_64-unknown-linux-musl/release/webssh
+          retention-days: 7
+
+  deploy:
+    name: Deploy
+    needs: build
+    if: github.event_name == 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.event_name != 'pull_request')
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://klercke.com
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: site
+          path: public
+
+      - name: Set up SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy
+          chmod 600 ~/.ssh/deploy
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Rsync to server
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+        run: >
+          rsync -rlptvz --delete
+          -e "ssh -i ~/.ssh/deploy -p $DEPLOY_PORT -o IdentitiesOnly=yes"
+          public/ "deploy@$DEPLOY_HOST:"
+
+  deploy-webssh:
+    name: Deploy webssh
+    needs: build
+    if: github.event_name == 'workflow_dispatch' || (github.ref == 'refs/heads/main' && github.event_name != 'pull_request')
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://klercke.com
+    concurrency:
+      group: deploy-webssh
+      cancel-in-progress: false
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: webssh
+
+      - name: Set up SSH
+        env:
+          DEPLOY_WEBSSH_SSH_KEY: ${{ secrets.DEPLOY_WEBSSH_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_WEBSSH_SSH_KEY" > ~/.ssh/webssh
+          chmod 600 ~/.ssh/webssh
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Rsync binary to server
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+        run: |
+          chmod 755 webssh
+          rsync -ptvz -e "ssh -i ~/.ssh/webssh -p $DEPLOY_PORT -o IdentitiesOnly=yes" webssh "deploy@$DEPLOY_HOST:"

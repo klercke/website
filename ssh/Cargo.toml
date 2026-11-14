@@ -1,0 +1,21 @@
+[package]
+name = "ssh"
+description = "russh server that serves the klercke.com shell"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "webssh"
+path = "src/main.rs"
+
+[dependencies]
+app.workspace = true
+rand = "0.10"
+ratatui = { workspace = true, features = ["crossterm", "unstable-backend-writer"] }
+russh = { version = "0.65", default-features = false, features = ["ring", "flate2"] }
+tokio = { version = "1", features = ["macros", "net", "rt-multi-thread", "signal", "sync", "time"] }
+
+[lints]
+workspace = true

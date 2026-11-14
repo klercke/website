@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+  <meta name="description" content="{{ config.description }}">
+  <link rel="stylesheet" href="{{ get_url(path='style.css', cachebust=true) }}">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <!-- Privacy-friendly analytics by Plausible, skipped when Global Privacy Control is on. See /privacy/ -->
+  <script>
+    if (!navigator.globalPrivacyControl) {
+      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+      plausible.init({ endpoint: "/api/event" });
+      var s = document.createElement("script");
+      s.async = true;
+      s.src = "/js/script.js";
+      document.head.appendChild(s);
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <nav>
+      {% for item in config.extra.nav %}
+      <a href="{{ get_url(path=item.path) }}">{{ item.name }}</a>
+      {% endfor %}
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock content %}
+  </main>
+  {% set git = load_data(path="data/git.toml", required=false) %}
+  {% set repo = "https://github.com/klercke/website" %}
+  <footer>
+    {% if git %}
+      {% if page is defined %}
+        {% set rel = page.relative_path %}
+      {% elif section is defined %}
+        {% set rel = section.relative_path %}
+      {% else %}
+        {% set rel = "" %}
+      {% endif %}
+      {% set entry = git.pages | get(key=rel, default="") %}
+      {% if entry %}
+      <p>Last updated {{ entry.date }} (<a href="{{ repo }}/commit/{{ entry.hash }}"><code>{{ entry.short }}</code></a>)</p>
+      {% endif %}
+    {% endif %}
+    <p>
+      Code: <a href="{{ repo }}/blob/main/LICENSES/AGPL-3.0-or-later.txt">AGPL-3.0</a>
+      · Writing: <a href="{{ repo }}/blob/main/LICENSES/CC-BY-SA-4.0.txt">CC BY-SA 4.0</a>
+      · <a href="{{ get_url(path='/privacy/') }}">privacy</a>
+      · <a href="{{ repo }}{% if git %}/tree/{{ git.head }}{% endif %}">source
+      {%- if git %} <code>{{ git.head_short }}</code>{% if git.dirty %} (modified){% endif %}{% endif %}</a>
+    </p>
+  </footer>
+</body>
+</html>
