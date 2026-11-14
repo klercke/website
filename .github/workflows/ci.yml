@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main, rewrite, feature/*]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Check and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ github.token }}
+
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ~/.cache/trunk
+            target
+          key: cargo-${{ runner.os }}-${{ hashFiles('Cargo.lock', 'rust-toolchain.toml') }}
+          restore-keys: cargo-${{ runner.os }}-
+
+      - name: Lint and test
+        run: nix develop --command just check
+
+      - name: REUSE compliance
+        run: nix develop --command reuse lint
+
+      - name: Build site
+        run: nix develop --command just build-site
+
+      - uses: actions/upload-artifact@v5
+        with:
+          name: site
+          path: site/public
+          retention-days: 7
