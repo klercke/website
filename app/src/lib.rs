@@ -7,6 +7,7 @@ pub mod content;
 
 use ratatui::{
     Frame,
+    layout::Position,
     style::{Color, Modifier, Style},
     text::{Line, Span},
     widgets::{Paragraph, Wrap},
@@ -14,6 +15,17 @@ use ratatui::{
 
 pub const HOST: &str = "klercke.com";
 pub const USER: &str = "guest";
+pub const SOURCE: &str = "https://github.com/klercke/website";
+
+/// Longest input line accepted, in chars.
+const MAX_INPUT: usize = 256;
+
+/// Scrollback lines keps.
+/// Anything older is dropped.
+const MAX_SCROLLBACK: usize = 2000;
+
+/// The drawn cursor at the end of the input line.
+const CURSOR: &str = "█";
 
 const YELLOW: Color = Color::Rgb(0xfa, 0xbd, 0x2f);
 const ORANGE: Color = Color::Rgb(0xfe, 0x80, 0x19);
@@ -66,6 +78,7 @@ pub struct App {
     history_pos: Option<usize>,
     /// Lines scrolled up from the bottom.
     scroll: u16,
+    cursor_visible: bool,
 }
 
 impl App {
@@ -78,17 +91,24 @@ impl App {
             history: Vec::new(),
             history_pos: None,
             scroll: 0,
+            cursor_visible: true,
         };
         app.print(Line::styled(
             format!("Welcome to {HOST}. Type `help` to get started."),
             Style::new().fg(YELLOW),
+        ));
+        app.print(Line::styled(
+            "This shell is free software (AGPL-3.0). Type `source` for the code.",
+            Style::new().fg(FG).add_modifier(Modifier::DIM),
         ));
         app
     }
 
     pub fn handle_key(&mut self, key: Key) -> Option<Action> {
         match key {
-            Key::Char(c) if !c.is_control() => self.input.push(c),
+            Key::Char(c) if !c.is_control() && self.input.chars().count() < MAX_INPUT => {
+                self.input.push(c);
+            }
             Key::Char(_) => {}
             Key::Backspace => {
                 self.input.pop();
@@ -117,11 +137,20 @@ impl App {
         None
     }
 
+    /// For frontends that blink the cursor themselves (the browser).
+    /// Terminal frontends leave it on and let the terminal blink it.
+    pub const fn set_cursor_visible(&mut self, visible: bool) {
+        self.cursor_visible = visible;
+    }
+
     pub fn render(&self, frame: &mut Frame) {
         let area = frame.area();
         let mut lines = self.scrollback.clone();
         let mut prompt = prompt_line(&self.input);
-        prompt.push_span(Span::styled(" ", Style::new().bg(FG)));
+        prompt.push_span(Span::styled(
+            if self.cursor_visible { CURSOR } else { " " },
+            Style::new().fg(FG),
+        ));
         lines.push(prompt);
 
         let paragraph = Paragraph::new(lines)
@@ -131,6 +160,27 @@ impl App {
         let bottom = total.saturating_sub(area.height);
         let offset = bottom.saturating_sub(self.scroll);
         frame.render_widget(paragraph.scroll((offset, 0)), area);
+
+        // Terminals blink their own cursor, but many won't blink text.
+        // So in a terminal, swap the drawn block for the real cursor.
+        // The prompt is the last line, so the first block found from the
+        // bottom is ours; if it's scrolled out of view, no position is set and
+        // the cursor stays hidden.
+        if self.frontend != Frontend::Web {
+            let buf = frame.buffer_mut();
+            let found = (area.top()..area.bottom())
+                .rev()
+                .flat_map(|y| {
+                    (area.left()..area.right())
+                        .rev()
+                        .map(move |x| Position::new(x, y))
+                })
+                .find(|&p| buf[p].symbol() == CURSOR);
+            if let Some(pos) = found {
+                buf[pos].set_symbol(" ");
+                frame.set_cursor_position(pos);
+            }
+        }
     }
 
     fn run(&mut self, line: &str) -> Option<Action> {
@@ -151,6 +201,7 @@ impl App {
             ("cat", None) => self.error("usage: cat <file>".into()),
             ("clear", _) => self.scrollback.clear(),
             ("whoami", _) => self.print_text(USER),
+            ("source", _) => self.print_text(&format!("This shell's source code: {SOURCE}")),
             ("open", Some(page)) => {
                 let Some((_, path)) = content::PAGES.iter().find(|(n, _)| *n == page) else {
                     let names: Vec<_> = content::PAGES.iter().map(|(n, _)| *n).collect();
@@ -186,6 +237,7 @@ impl App {
             ("cat <file>", "print a file"),
             ("open <page>", "open a page of the website"),
             ("whoami", "who you are"),
+            ("source", "show where to get this shell's source code"),
             ("clear", "clear the screen"),
             ("exit", exit),
         ];
@@ -212,6 +264,10 @@ impl App {
     }
 
     fn print(&mut self, line: Line<'static>) {
+        if self.scrollback.len() >= MAX_SCROLLBACK {
+            self.scrollback
+                .drain(..=self.scrollback.len() - MAX_SCROLLBACK);
+        }
         self.scrollback.push(line);
     }
 
@@ -277,5 +333,18 @@ mod tests {
         type_line(&mut app, "ls");
         app.handle_key(Key::Up);
         assert_eq!(app.input, "ls");
+    }
+
+    #[test]
+    fn input_and_scrollback_are_capped() {
+        let mut app = App::new(Frontend::Ssh);
+        for _ in 0..MAX_INPUT + 10 {
+            app.handle_key(Key::Char('a'));
+        }
+        assert_eq!(app.input.chars().count(), MAX_INPUT);
+        for _ in 0..MAX_SCROLLBACK {
+            type_line(&mut app, "x");
+        }
+        assert!(app.scrollback.len() <= MAX_SCROLLBACK);
     }
 }

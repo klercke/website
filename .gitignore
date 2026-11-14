@@ -7,3 +7,4 @@
 result
 result-*
 /site/data/git.toml
+/ssh_host_ed25519_key

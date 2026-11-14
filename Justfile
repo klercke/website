@@ -25,9 +25,9 @@ serve: git-info
 serve-web:
     cd web && trunk serve
 
-# Run the SSH server locally
+# Run the SSH server locally on port 2222
 ssh-dev:
-    cargo run -p ssh
+    WEBSSH_LISTEN='[::]:2222' cargo run -p ssh
 
 # fmt, clippy (native and wasm), tests
 check:

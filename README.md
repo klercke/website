@@ -29,6 +29,8 @@ just check
 
 ## Deployment notes
 
+### 404
+
 For the 404 page to work, Caddy has to serve it with a custom error handler inside the site block:
 
 ```caddyfile
@@ -46,7 +48,10 @@ handle_errors {
 
 Without this, visitors just get a default 404 page.
 
+### Analytics
+
 For Plausible Analytics, Caddy needs this block:
+
 ```caddyfile
 @plausible path /js/script.js /api/event
 handle @plausible {
@@ -55,6 +60,15 @@ handle @plausible {
         header_up Host {http.reverse_proxy.upstream.hostport}
     }
 }
+```
+
+### SSH
+
+By default, webssh wants to take over port 22.
+Either the host's system sshd or webssh needs to listen on a different port:
+
+```shell
+export WEBSSH_LISTEN='[::]:2222'
 ```
 
 ## License

@@ -1,10 +1,13 @@
 //! Run the shell in a real terminal: `just tui`.
 
 use app::{Action, App, Frontend, Key};
+use ratatui::crossterm::cursor::SetCursorStyle;
 use ratatui::crossterm::event::{self, Event, KeyCode, KeyEventKind, KeyModifiers};
+use ratatui::crossterm::execute;
 
 fn main() -> std::io::Result<()> {
     let mut terminal = ratatui::init();
+    execute!(std::io::stdout(), SetCursorStyle::BlinkingBlock)?;
     let mut app = App::new(Frontend::Local);
     let result = loop {
         if let Err(e) = terminal.draw(|f| app.render(f)) {
@@ -36,6 +39,7 @@ fn main() -> std::io::Result<()> {
             break Ok(());
         }
     };
+    let _ = execute!(std::io::stdout(), SetCursorStyle::DefaultUserShape);
     ratatui::restore();
     result
 }

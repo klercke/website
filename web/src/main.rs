@@ -1,4 +1,8 @@
-use std::{cell::RefCell, io, rc::Rc};
+use std::{
+    cell::{Cell, RefCell},
+    io,
+    rc::Rc,
+};
 
 use app::{Action, App, Frontend, Key};
 use ratzilla::{
@@ -11,6 +15,9 @@ use ratzilla::{
         wasm_bindgen::{JsCast, closure::Closure},
     },
 };
+
+/// Half a blink cycle, in milliseconds, roughly what terminals use.
+const BLINK_MS: f64 = 530.0;
 
 /// Same stack as `$mono` in the site's Sass.
 const MONO: &[&str] = &[
@@ -44,8 +51,15 @@ fn run() -> io::Result<()> {
     let terminal = Terminal::new(WebGl2Backend::new_with_options(options)?)?;
 
     let window = web_sys::window().ok_or_else(|| io::Error::other("no window"))?;
+    let now = || {
+        web_sys::window()
+            .and_then(|w| w.performance())
+            .map_or(0.0, |p| p.now())
+    };
+    let last_key = Rc::new(Cell::new(now()));
     let on_key = Closure::<dyn FnMut(KeyboardEvent)>::new({
         let app = app.clone();
+        let last_key = last_key.clone();
         move |ev: KeyboardEvent| {
             if ev.meta_key() {
                 return;
@@ -54,6 +68,7 @@ fn run() -> io::Result<()> {
                 return;
             };
             ev.prevent_default();
+            last_key.set(now());
             if let Some(Action::Navigate(path)) = app.borrow_mut().handle_key(key)
                 && let Some(window) = web_sys::window()
             {
@@ -66,7 +81,12 @@ fn run() -> io::Result<()> {
         .map_err(|_| io::Error::other("could not listen for keys"))?;
     on_key.forget();
 
-    terminal.draw_web(move |f| app.borrow().render(f));
+    terminal.draw_web(move |f| {
+        let since_key = now() - last_key.get();
+        app.borrow_mut()
+            .set_cursor_visible((since_key / BLINK_MS).floor() % 2.0 < 1.0);
+        app.borrow().render(f);
+    });
     Ok(())
 }
 
