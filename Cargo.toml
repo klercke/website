@@ -16,7 +16,6 @@ ratatui = { version = "0.30", default-features = false }
 opt-level = "z"
 lto = true
 codegen-units = 1
-strip = true
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
