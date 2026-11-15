@@ -16,7 +16,7 @@ My homelab is built via Terraform/OpenTofu and Ansible, my machines run NixOS, a
 
 I love tinkering with everything RF, including GMRS, ham radio (RX only, since I am not licensed yet!), MeshCore, SDRs, and anything else that wiggles the air roughly 3 to 3,000,000,000,000 times per second.
 
-If I'm not in front of a computer or at the firehouse, I love to go hiking, camping, or off-roading.
+If I'm not in front of a computer or at the firehouse, I love to go hiking and camping or to sit around a fire with my friends.
 
 If you'd like to contact me about anything, please feel free to reach out via email at [konnor@klercke.com](mailto:konnor@klercke.com) ([PGP-encrypted mail welcome!](/pgp-key.txt)).
 
