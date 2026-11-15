@@ -9,6 +9,7 @@
 //!   systemd's `$STATE_DIRECTORY`, or in the working directory. A missing key
 //!   is generated on first start.
 
+mod backend;
 mod input;
 mod limits;
 mod session;
@@ -23,7 +24,7 @@ use std::{env, net::IpAddr};
 use russh::keys::ssh_key::LineEnding;
 use russh::keys::{Algorithm, PrivateKey};
 use russh::server::Config;
-use russh::{Disconnect, MethodKind, MethodSet, SshId};
+use russh::{Disconnect, MethodKind, MethodSet, Preferred, SshId, kex};
 use tokio::net::{TcpListener, TcpStream};
 use tokio::signal::unix::{SignalKind, signal};
 
@@ -34,6 +35,7 @@ const MAX_CONNECTIONS: usize = 64;
 const MAX_PER_CLIENT: u32 = 3;
 const MAX_PER_MINUTE: u32 = 10;
 const IDLE_TIMEOUT: Duration = Duration::from_mins(10);
+const HANDSHAKE_TIMEOUT: Duration = Duration::from_secs(30);
 const MAX_SESSION: Duration = Duration::from_hours(1);
 
 #[tokio::main]
@@ -60,6 +62,20 @@ async fn run() -> Result<(), Error> {
         inactivity_timeout: Some(IDLE_TIMEOUT),
         keepalive_interval: Some(Duration::from_secs(30)),
         nodelay: true,
+        preferred: Preferred {
+            kex: Cow::Owned(
+                [
+                    Preferred::DEFAULT.kex.as_ref(),
+                    &[
+                        kex::ECDH_SHA2_NISTP256,
+                        kex::ECDH_SHA2_NISTP384,
+                        kex::ECDH_SHA2_NISTP521,
+                    ],
+                ]
+                .concat(),
+            ),
+            ..Preferred::default()
+        },
         ..Config::default()
     });
     let limits = Limits::new(MAX_CONNECTIONS, MAX_PER_CLIENT, MAX_PER_MINUTE);
@@ -101,8 +117,9 @@ async fn run() -> Result<(), Error> {
 async fn serve(config: Arc<Config>, stream: TcpStream, ip: IpAddr, permit: Permit) {
     let started = Instant::now();
     eprintln!("{ip}: connected");
-    match russh::server::run_stream(config, stream, Connection::new(ip, permit)).await {
-        Ok(running) => {
+    let handshake = russh::server::run_stream(config, stream, Connection::new(ip, permit));
+    match tokio::time::timeout(HANDSHAKE_TIMEOUT, handshake).await {
+        Ok(Ok(running)) => {
             let handle = running.handle();
             match tokio::time::timeout(MAX_SESSION, running).await {
                 Ok(Ok(())) => {}
@@ -118,7 +135,8 @@ async fn serve(config: Arc<Config>, stream: TcpStream, ip: IpAddr, permit: Permi
                 }
             }
         }
-        Err(e) => eprintln!("{ip}: handshake failed: {e}"),
+        Ok(Err(e)) => eprintln!("{ip}: handshake failed: {e}"),
+        Err(_) => eprintln!("{ip}: handshake timed out"),
     }
     eprintln!("{ip}: disconnected after {}s", started.elapsed().as_secs());
 }

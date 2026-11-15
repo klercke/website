@@ -2,8 +2,8 @@
 
 use std::net::IpAddr;
 
+use crate::backend::SshBackend;
 use app::{Action, App, Frontend};
-use ratatui::backend::CrosstermBackend;
 use ratatui::layout::Rect;
 use ratatui::{Terminal, TerminalOptions, Viewport};
 use russh::server::{Auth, ChannelOpenHandle, Handler, Msg, Session};
@@ -12,7 +12,7 @@ use russh::{Channel, ChannelId, ChannelOpenFailure, Pty};
 use crate::limits::Permit;
 
 pub type Error = Box<dyn std::error::Error + Send + Sync>;
-type Term = Terminal<CrosstermBackend<Vec<u8>>>;
+type Term = Terminal<SshBackend>;
 
 /// Bigger windows are clamped to this so a client can't make us render huge frames.
 const MAX_COLS: u16 = 400;
@@ -60,7 +60,7 @@ impl Connection {
         session: &mut Session,
     ) -> Result<(), Error> {
         let terminal = Terminal::with_options(
-            CrosstermBackend::new(ENTER_ALT_SCREEN.to_vec()),
+            SshBackend::new(ENTER_ALT_SCREEN, area.as_size()),
             TerminalOptions {
                 viewport: Viewport::Fixed(area),
             },
@@ -75,7 +75,7 @@ impl Connection {
         };
         let app = &self.app;
         terminal.draw(|frame| app.render(frame))?;
-        let frame = std::mem::take(terminal.backend_mut().writer_mut());
+        let frame = terminal.backend_mut().take_output();
         if !frame.is_empty() {
             session.data(channel, frame)?;
         }
@@ -83,9 +83,10 @@ impl Connection {
     }
 
     fn quit(&mut self, channel: ChannelId, session: &mut Session) -> Result<(), Error> {
-        let mut bye = self.terminal.take().map_or_else(Vec::new, |mut t| {
-            std::mem::take(t.backend_mut().writer_mut())
-        });
+        let mut bye = self
+            .terminal
+            .take()
+            .map_or_else(Vec::new, |mut t| t.backend_mut().take_output());
         bye.extend_from_slice(LEAVE_ALT_SCREEN);
         bye.extend_from_slice(b"Thanks for visiting klercke.com!\r\n");
         session.data(channel, bye)?;
@@ -184,6 +185,7 @@ impl Handler for Connection {
         let size = area(cols, rows);
         self.size = Some(size);
         if let Some(terminal) = self.terminal.as_mut() {
+            terminal.backend_mut().set_size(size.as_size());
             terminal.resize(size)?;
             self.redraw(channel, session)?;
         }
