@@ -7,6 +7,10 @@ template = "index.html"
 
 *(KLER-key)*
 
+> [!IMPORTANT]
+> Please note that as of 2026-11-17, I am using a new OpenPGP key.
+> For more information, please see the [transition statement](/key-transition-2026.txt).
+
 Professionally, I'm a cloud network engineer at a large regional bank.
 Personally, I'm a volunteer firefighter, a proud Eagle Scout, an Everything-as-Code enthusiast, and an RF, networking, and Linux nerd.
 
@@ -19,4 +23,6 @@ I love tinkering with everything RF, including GMRS, ham radio (RX only, since I
 If I'm not in front of a computer or at the firehouse, I love to go hiking and camping or to sit around a fire with my friends.
 
 If you'd like to contact me about anything, please feel free to reach out via email at [konnor@klercke.com](mailto:konnor@klercke.com) ([PGP-encrypted mail welcome!](/pgp-key.txt)).
+
+
 

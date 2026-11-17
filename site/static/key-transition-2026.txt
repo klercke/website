@@ -1,0 +1,61 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+OpenPGP Key Transition Statement
+
+Date: 2026-11-17
+
+I am beginning the process of transitioning my primary OpenPGP identity to a new key.
+This message serves as documentation of this change and is signed to certify its authenticity.
+
+The old key remains valid for now but, effective immediately, should not be used as a target for encryption.
+This transition period will last until all of my data has been re-encrypted to a new key.
+The old key may be revoked at some point in the future, or allowed to expire..
+
+The old key has not been compromised; this rotation is planned.
+The primary purpose of this transition is to switch from an rsa4096 key to the much more modern ed25519.
+
+
+Please update your records to use my new key going forward.
+
+Old key (being retired):
+    Konnor Klercke
+    4096-bit RSA
+    Fingerprint: 3008 8561 9EC2 5E4A 72A4  0716 249D F839 A80D 37DD
+
+New key (now current):
+    Konnor Klercke
+    Ed25519
+    Fingerprint: 0678 8C66 C871 D562 7E71  4F9A 6D08 129B 1478 5597
+
+Identities on the new key:
+    Konnor Klercke <konnor@klercke.com>
+    Konnor Klercke <klercke@protonmail.com>
+    d0c_z3r0d4y <d0c@z3r0d4y.dev>
+
+The new key is available at https://klercke.com/pgp-key.txt and from keys.openpgp.org.
+In the future, it will also be served via WKD on klercke.com.
+
+To verify this transition, confirm the signature on this statement against the key signatures above.
+
+Konnor Klercke
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEFN2CasQ7I3DRw7pqmgqjI1AzQ9IFAmr81ucACgkQmgqjI1Az
+Q9IZZw//YPDpBHf00QfvXu4W9attFjBZuRZVC45M6zapY73V/lzzzChGZ+HEsvVE
+agcsjwDrPkjgU+iaJbO66mIENJ2Thj3SqBNrdVTlYgmV5ZVYHg4C/A36oT5skG38
+9L2rGt0g76cJQVf9+Jd7aj6coCvrmKw+V6ekHsGk95YnvA2XveYjwZaqQMaWABGj
+yWEEgA22cRJLPX1YcPMz4cCRpm0CRBBHgTFkjaVPlFGwnZc4ydGp482jE3MoVUA0
+3BjLLH04RFMIHvYgqyfCfcKN4KQ9rqlJm2rP+owxpglPd9VfNJfnu3RprPsEWGAT
+WAbG12qpHF8xAzH6f+xj9SfA6hRchuPk4h/WOcq8ZVP1m4qDedvzCosp/ju9h7ID
+G7cwnNKyJrkSohN2q54qCw66kGieonXg6iwgspGK3XGHEy2zuzla2DaRO60RgXR+
+TtDAFe59d3ofIa/k4Kjhri2WVUFzlMec4lUotFiCdxY5dxfQ5YIvlGdKa6UkmIN7
+2X5O0jKWZct1Qljek/C8hjoTn2PZEwqVDZp6+KA8QGprc1Mvuz6WUdgF8EvcEW1q
+mKI6AKgYjrEzhDRtlkaKntH9aRJIYxnH4YGBGsVeY5ntpbIs5kdgUVffKQO/oLmH
+HadIC5tFPHI5nmq1yeAJRqxItnqbFQ2HhxFlc0lwfbgHN3wM5LmIdQQBFgoAHRYh
+BJtXN60hpuEpOjdKaG0c7eMWq22UBQJq/NboAAoJEG0c7eMWq22UE5MBAKx0lszx
+bn0YYAHJphpA9c8n+JYFh3N8ZDmFCiG7fHowAP95V1350F7BT81U2AzLwvUK0Da5
+ivQMI/XbOlrCp05HDA==
+=eovJ
+-----END PGP SIGNATURE-----

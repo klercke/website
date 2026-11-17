@@ -86,3 +86,25 @@ main > h1:first-child:not(.no-cursor)::after,
     animation: none;
   }
 }
+
+$alerts: (
+  note: #83a598,
+  tip: #8ec07c,
+  important: #d3869b,
+  warning: #fabd2f,
+  caution: #fb4934,
+);
+
+@each $kind, $color in $alerts {
+  .markdown-alert-#{$kind} {
+    border-left: 3px solid $color;
+    margin-left: 0;
+    padding-left: 1ch;
+
+    &::before {
+      content: "// #{$kind}";
+      color: $color;
+      font-weight: bold;
+    }
+  }
+}

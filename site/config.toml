@@ -10,6 +10,7 @@ generate_feeds = false
 
 [markdown]
 smart_punctuation = false
+github_alerts = true
 
 [extra]
 nav = [

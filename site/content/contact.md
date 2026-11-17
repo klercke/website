@@ -2,6 +2,11 @@
 title = "Contact"
 +++
 
+> [!IMPORTANT]
+> Please note that as of 2026-11-17, I am using a new OpenPGP key.
+> This is reflected in the information below.
+> For more information, please see the [transition statement](/key-transition-2026.txt).
+
 The best way to reach me is email: [konnor@klercke.com](mailto:konnor@klercke.com).
 
 If you'd like to encrypt it, my PGP key is
