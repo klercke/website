@@ -15,8 +15,8 @@ path = [
   "Cargo.lock",
   "flake.lock",
   "site/static/pgp-key.txt",
-  "site/static/hall-of-fame.md",
   "site/static/.well-known/security.txt",
+  "site/static/.well-known/gpc.json"
 ]
 SPDX-FileCopyrightText = "Konnor Klercke <konnor@klercke.com>"
 SPDX-License-Identifier = "CC0-1.0"
