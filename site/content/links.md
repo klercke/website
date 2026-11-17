@@ -6,6 +6,6 @@ title = "Links"
 - [GitHub](https://github.com/klercke)
 - [Email](mailto:konnor@klercke.com)
 - [Bluesky](https://bsky.app/profile/klercke.com)
-- [Keyoxide](keyoxide.org/06788C66C871D5627E714F9A6D08129B1478559)
+- [Keyoxide](https://keyoxide.org/6D08129B14785597)
 - [GitLab (mostly archives)](https://gitlab.com/klercke)
 

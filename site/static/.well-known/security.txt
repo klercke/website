@@ -1,32 +1,25 @@
 -----BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+Hash: SHA512
 
-Contact: mailto:security@z3r0d4y.dev
-Expires: 2024-12-31T17:00:00.000Z
-Encryption: https://z3r0d4y.dev/pgp-key.txt
-Acknowledgments: https://z3r0d4y.dev/hall-of-fame.txt
+Contact: mailto:security@klercke.com
+Expires: 2028-01-01T05:00:00.000Z
+Encryption: https://klercke.com/pgp-key.txt
+Acknowledgments: https://klercke.com/hall-of-fame/
 Preferred-Languages: en
-Canonical: https://z3r0d4y.dev/.well-known/security.txt
+Canonical: https://klercke.com/.well-known/security.txt
+Policy: https://klercke.com/security-policy/
 
 If this document is expired, please contact the above email address and request an update to security.txt.
-DO NOT DISCLOSE SENSITIVE INFORMATION IF THIS FILE IS EXPIRED OR ITS SIGNATURE IS INVALID.
 
-Update 2024-07-21
+!!! DO NOT DISCLOSE SENSITIVE INFORMATION IF THIS FILE IS EXPIRED OR ITS SIGNATURE IS INVALID. !!!
 
+This document was created 2024-07-21.
+This document was last updated 2026-11-17.
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEFN2CasQ7I3DRw7pqmgqjI1AzQ9IFAmadSNgACgkQmgqjI1Az
-Q9Jnng//QzELrU/JBDWGCJVllwgs9X9V0AJ3w3xfqyMgkd2qsRdrabqo6oF8n61/
-Xc2cAQeUU0pVNxpMBsa+421okhY3Lgjx8Lu7I6F2biRnLNe/yYoDEKsWCl69GNGD
-NJT58MGtKDcqUmWYG0Mx4Z8iscm4mnYE1g8/7hsgNMZKDjKlEe7EjhT4r5/ZS5lB
-HwHDFDz0zSHxkQMHwYa4qC5u2sXeR2FS41fIojkBHwz8TBwrnhUT6lrzTFG3csIL
-dgSXofLgW3sSs2j5MxhMKPyHh/D3mS+WRLelQ/dmM1a7Q+5a68PhBYky52+J71qx
-VyAf9l/j4wA4UwrRhCQIqRZWBOpFBwOQ7zL+/XeOCQout5JxcqRtPgWkLSg3Vf5+
-+XmGtr/D/0PJDTqPZfJMOjeC2PaFkJzRjLbrN/wIFaGrbECaPg2YvJqbLBYIKM9u
-XowddA5WHAYrtqsj7AAHKp+tTce5rbs65/Xmo4Yc5Xuf61AXjsCi9OGxh5V48CnX
-lhWOSUTOedhBq1WhsKItRz3E92nfwg0HbJoLF4rLz4Z52KnQlX2RSKLsRFYRrg+Z
-hVP+UcLIKcn1MKMODTskeg9ufK5acNMklhlSJbaRd5HMkVeHthN9UrATZ1L5jRgz
-yby85sQg2dxiwf0x2g73swstr8LRwnNdIioJwLhVBWvWIfqa3kk=
-=w6hc
+iHUEARYKAB0WIQSbVzetIabhKTo3SmhtHO3jFqttlAUCavyVwgAKCRBtHO3jFqtt
+lE0vAQCG92obzX1B71mmglHLm0illYdEipvL+iiRzstFD34xawEA+RfSE3epW1te
+NmBo/H6Q7MzSK877zDiohmDmPftdmAk=
+=E5+u
 -----END PGP SIGNATURE-----
 

@@ -24,12 +24,16 @@ pub const FILES: &[File] = &[
         body: include_str!("../../site/content/privacy.md"),
     },
     File {
-        name: "security.txt",
-        body: include_str!("../../site/static/.well-known/security.txt"),
+        name: "hall-of-fame.md",
+        body: include_str!("../../site/content/hall-of-fame.md"),
     },
     File {
-        name: "hall-of-fame.txt",
-        body: include_str!("../../site/static/hall-of-fame.txt"),
+        name: "security-policy.md",
+        body: include_str!("../../site/content/security-policy.md"),
+    },
+    File {
+        name: "security.txt",
+        body: include_str!("../../site/static/.well-known/security.txt"),
     },
     File {
         name: "pgp-key.txt",
@@ -44,6 +48,8 @@ pub const PAGES: &[(&str, &str)] = &[
     ("links", "/links/"),
     ("contact", "/contact/"),
     ("privacy", "/privacy/"),
+    ("hall-of-fame", "/hall-of-fame/"),
+    ("security-policy", "/security-policy/"),
 ];
 
 pub const SITE: &str = "https://klercke.com";
