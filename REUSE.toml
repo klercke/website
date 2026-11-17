@@ -15,6 +15,7 @@ path = [
   "Cargo.lock",
   "flake.lock",
   "site/static/pgp-key.txt",
+  "site/static/key-transition-2026.txt",
   "site/static/.well-known/security.txt",
   "site/static/.well-known/gpc.json"
 ]
